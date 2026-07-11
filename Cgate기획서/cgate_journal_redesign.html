@@ -1,0 +1,610 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+.wrap{display:flex;flex-direction:column;align-items:center;padding:14px 0 24px;}
+.mon{width:100%;max-width:680px;background:#1e2128;border-radius:14px 14px 0 0;padding:11px 11px 0;}
+.mbar{display:flex;align-items:center;gap:6px;padding:0 2px 9px;}
+.d{width:10px;height:10px;border-radius:50%;}
+.dr{background:#FF5F57;}.dy{background:#FEBC2E;}.dg{background:#28C840;}
+.wt{font-size:11px;color:#666;margin:0 auto;}
+.scr{width:100%;aspect-ratio:16/9;background:#EEF6FC;border-radius:5px;overflow:hidden;display:flex;flex-direction:column;}
+.neck{width:16%;height:20px;background:#181b21;margin:0 auto;}
+.foot{width:42%;height:9px;background:#1e2128;border-radius:0 0 10px 10px;margin:0 auto;}
+
+/* top bar */
+.topbar{height:36px;background:#fff;border-bottom:1px solid #dde8f0;display:flex;align-items:center;padding:0 16px;gap:0;flex-shrink:0;}
+.logo{font-size:13px;font-weight:500;color:#0d3d5c;letter-spacing:-.5px;margin-right:20px;}
+.tabbtn{font-size:11px;color:#7aa5be;padding:6px 14px;border-bottom:2px solid transparent;cursor:pointer;transition:.15s;white-space:nowrap;}
+.tabbtn.on{color:#0d3d5c;font-weight:500;border-bottom:2px solid #1a7abf;}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.av{width:22px;height:22px;border-radius:50%;background:#1a8c5e;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;color:#fff;}
+.new-btn{font-size:10px;color:#0d3d5c;border:1px solid #c0d8e8;border-radius:6px;padding:3px 10px;background:#f4fafd;cursor:pointer;}
+
+/* ── DATE VIEW ── */
+.date-view{flex:1;display:grid;grid-template-columns:200px 1fr;gap:0;overflow:hidden;}
+
+.left-pane{background:#fff;border-right:1px solid #dde8f0;display:flex;flex-direction:column;padding:14px 12px;gap:12px;overflow:hidden;}
+.sec-label{font-size:9px;font-weight:500;color:#7aa5be;letter-spacing:.6px;text-transform:uppercase;margin-bottom:6px;}
+
+/* calendar */
+.cal-month{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.cal-mn{font-size:11px;font-weight:500;color:#0d3d5c;}
+.cal-arr{background:none;border:none;font-size:11px;color:#7aa5be;cursor:pointer;padding:1px 4px;}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;}
+.cc{font-size:9px;text-align:center;padding:3px 0;border-radius:4px;color:#7aa5be;cursor:pointer;}
+.cc.dow{color:#b0ccd8;font-weight:500;cursor:default;}
+.cc.has{background:#dff0fb;color:#1a6a9a;font-weight:500;}
+.cc.sel{background:#1a7abf;color:#fff;font-weight:500;border-radius:5px;}
+.cc.tod{border:1.5px solid #1a8c5e;}
+.cc.emp{color:transparent;cursor:default;}
+
+/* mini remind in left */
+.remind-mini{background:#f0faf5;border-radius:8px;border:1px solid #b8e8d0;padding:10px;flex-shrink:0;}
+.rm-title{font-size:9px;font-weight:500;color:#0d6640;margin-bottom:6px;display:flex;align-items:center;gap:4px;}
+.rm-card{background:#fff;border-radius:6px;border:1px solid #cceadb;padding:7px 8px;margin-bottom:5px;}
+.rm-card:last-child{margin-bottom:0;}
+.rm-tick{font-size:11px;font-weight:500;color:#0d3d5c;}
+.rm-ago{font-size:8px;color:#1a8c5e;font-weight:500;}
+.rm-txt{font-size:9px;color:#4a7a6a;line-height:1.4;margin-top:2px;}
+.rm-price{font-size:8px;color:#7aa5be;margin-top:3px;}
+.rm-price b{color:#0d3d5c;}
+
+/* right: entry feed */
+.right-pane{display:flex;flex-direction:column;overflow:hidden;}
+.feed-header{background:#fff;border-bottom:1px solid #dde8f0;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.fh-date{font-size:12px;font-weight:500;color:#0d3d5c;}
+.fh-meta{font-size:9px;color:#7aa5be;margin-top:1px;}
+.fh-nav{display:flex;gap:4px;}
+.fh-nav button{background:none;border:1px solid #dde8f0;border-radius:5px;font-size:10px;color:#7aa5be;padding:2px 7px;cursor:pointer;}
+
+.entries{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;padding:10px;overflow:hidden;}
+.ecard{background:#fff;border-radius:10px;border:1px solid #dde8f0;overflow:hidden;display:flex;flex-direction:column;}
+.ec-top{padding:8px 10px 6px;border-bottom:1px solid #f0f6fa;}
+.ec-row1{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;}
+.ec-ticker{font-size:13px;font-weight:500;color:#0d3d5c;}
+.ec-time{font-size:8px;color:#b0ccd8;}
+.ec-name{font-size:9px;color:#7aa5be;}
+.badge{font-size:8px;font-weight:500;padding:2px 7px;border-radius:20px;}
+.bb{background:#dff0fb;color:#0c5580;}.bs{background:#fde8e8;color:#8b2020;}
+.ec-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:6px 10px;}
+.sl{font-size:8px;color:#7aa5be;}
+.sv{font-size:10px;font-weight:500;color:#0d3d5c;}
+.ec-reason{margin:0 10px 8px;background:#f4fdf8;border-left:3px solid #1a8c5e;border-radius:0 5px 5px 0;padding:5px 8px;font-size:9px;color:#2d6650;line-height:1.5;flex:1;}
+.ec-rl{font-size:8px;color:#1a8c5e;font-weight:500;margin-bottom:2px;}
+
+/* ── COMPANY VIEW ── */
+.company-view{flex:1;display:grid;grid-template-columns:160px 1fr;gap:0;overflow:hidden;}
+
+.co-sidebar{background:#fff;border-right:1px solid #dde8f0;padding:12px 10px;display:flex;flex-direction:column;gap:4px;overflow:hidden;}
+.co-item{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:8px;cursor:pointer;transition:.15s;}
+.co-item:hover{background:#f4fafd;}
+.co-item.on{background:#EEF6FC;}
+.co-logo{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;}
+.co-info{flex:1;min-width:0;}
+.co-ticker{font-size:11px;font-weight:500;color:#0d3d5c;}
+.co-cnt{font-size:8px;color:#7aa5be;}
+.co-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.dot-hold{background:#1a8c5e;}.dot-sold{background:#b0ccd8;}
+
+/* company main: card news */
+.co-main{display:flex;flex-direction:column;overflow:hidden;}
+.co-banner{padding:14px 18px 12px;border-bottom:1px solid #dde8f0;display:flex;align-items:flex-end;justify-content:space-between;flex-shrink:0;}
+.cb-left{display:flex;align-items:center;gap:10px;}
+.cb-logo{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;}
+.cb-ticker{font-size:18px;font-weight:500;color:#0d3d5c;}
+.cb-name{font-size:10px;color:#7aa5be;margin-top:1px;}
+.cb-badge{font-size:9px;font-weight:500;padding:3px 10px;border-radius:20px;}
+.cb-cnt{font-size:9px;color:#7aa5be;}
+
+/* card news grid */
+.cn-grid{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;padding:10px;overflow:hidden;}
+.cn-card{background:#fff;border-radius:10px;border:1px solid #dde8f0;display:flex;flex-direction:column;overflow:hidden;}
+.cn-card.featured{border:2px solid #1a7abf;}
+.cn-header{padding:8px 10px 7px;}
+.cn-h-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;}
+.cn-date{font-size:8px;color:#b0ccd8;}
+.cn-action{font-size:8px;font-weight:500;}
+.cn-price-row{display:flex;align-items:baseline;gap:6px;margin-top:4px;}
+.cn-price{font-size:16px;font-weight:500;color:#0d3d5c;}
+.cn-pricesub{font-size:9px;color:#7aa5be;}
+.cn-divider{height:1px;background:#f0f6fa;}
+.cn-body{padding:8px 10px;flex:1;display:flex;flex-direction:column;gap:4px;}
+.cn-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;}
+.cn-reason{background:#f4fdf8;border-radius:6px;border-left:3px solid #1a8c5e;border-radius:0 5px 5px 0;padding:5px 8px;font-size:9px;color:#2d6650;line-height:1.5;flex:1;}
+.cn-rl{font-size:8px;color:#1a8c5e;font-weight:500;margin-bottom:2px;}
+
+.hidden{display:none!important;}
+</style>
+
+<div class="wrap">
+<div class="mon">
+  <div class="mbar">
+    <div class="d dr"></div><div class="d dy"></div><div class="d dg"></div>
+    <span class="wt">CGATE — 매매일지</span>
+  </div>
+  <div class="scr">
+
+    <div class="topbar">
+      <span class="logo">CGATE</span>
+      <div class="tabbtn on" id="tb-date" onclick="go('date')">날짜별 일기 조회</div>
+      <div class="tabbtn" id="tb-co" onclick="go('co')">회사별 일기 조회</div>
+      <div class="topbar-right">
+        <div class="new-btn"><i class="ti ti-pencil" style="font-size:9px;" aria-hidden="true"></i> 새 일지</div>
+        <div class="av">권</div>
+      </div>
+    </div>
+
+    <!-- DATE VIEW -->
+    <div class="date-view" id="v-date">
+
+      <div class="left-pane">
+        <div>
+          <div class="sec-label">날짜 선택</div>
+          <div class="cal-month">
+            <span class="cal-mn">2026년 6월</span>
+            <div><button class="cal-arr">‹</button><button class="cal-arr">›</button></div>
+          </div>
+          <div class="cal-g">
+            <div class="cc dow">일</div><div class="cc dow">월</div><div class="cc dow">화</div><div class="cc dow">수</div><div class="cc dow">목</div><div class="cc dow">금</div><div class="cc dow">토</div>
+            <div class="cc emp"></div><div class="cc">1</div><div class="cc has">2</div><div class="cc">3</div><div class="cc has">4</div><div class="cc">5</div><div class="cc">6</div>
+            <div class="cc">7</div><div class="cc has">8</div><div class="cc">9</div><div class="cc has sel">10</div><div class="cc has">11</div><div class="cc">12</div><div class="cc">13</div>
+            <div class="cc">14</div><div class="cc has">15</div><div class="cc">16</div><div class="cc has">17</div><div class="cc">18</div><div class="cc has">19</div><div class="cc">20</div>
+            <div class="cc">21</div><div class="cc has">22</div><div class="cc">23</div><div class="cc has">24</div><div class="cc">25</div><div class="cc has">26</div><div class="cc">27</div>
+            <div class="cc">28</div><div class="cc has tod">29</div><div class="cc">30</div><div class="cc emp"></div><div class="cc emp"></div><div class="cc emp"></div><div class="cc emp"></div>
+          </div>
+        </div>
+
+        <div class="remind-mini">
+          <div class="rm-title"><i class="ti ti-clock" style="font-size:10px;" aria-hidden="true"></i> 그날의 그때…</div>
+          <div class="rm-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span class="rm-tick">TSLA</span><span class="rm-ago">1달 전 매수</span>
+            </div>
+            <div class="rm-txt">FSD 수익화 본격화 시점 판단. 로보택시 기대감으로 분할 매수.</div>
+            <div class="rm-price">단가 <b>$242.50</b> · PER <b>68.2x</b></div>
+          </div>
+          <div class="rm-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span class="rm-tick">GOOGL</span><span class="rm-ago" style="color:#7aa5be;">1달 전 매도</span>
+            </div>
+            <div class="rm-txt">광고 회복 둔화, AI 전환비용 증가로 비중 축소.</div>
+            <div class="rm-price">단가 <b>$178.30</b> · 수익률 <b style="color:#1a8c5e;">+12.4%</b></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-pane">
+        <div class="feed-header">
+          <div>
+            <div class="fh-date">2026년 6월 10일 수요일</div>
+            <div class="fh-meta">거래 3건 · 매수 2 · 매도 1</div>
+          </div>
+          <div class="fh-nav">
+            <button>‹ 전날</button>
+            <button>다음날 ›</button>
+          </div>
+        </div>
+        <div class="entries">
+
+          <div class="ecard">
+            <div class="ec-top">
+              <div class="ec-row1"><span class="ec-ticker">AAPL</span><span class="ec-time">09:42 AM</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <span class="ec-name">Apple Inc.</span><span class="badge bb">매수</span>
+              </div>
+            </div>
+            <div class="ec-stats">
+              <div><div class="sl">체결가</div><div class="sv">$189.34</div></div>
+              <div><div class="sl">수량</div><div class="sv">5주</div></div>
+              <div><div class="sl">PER</div><div class="sv">28.4x</div></div>
+              <div><div class="sl">PBR</div><div class="sv">8.2x</div></div>
+              <div><div class="sl">총금액</div><div class="sv">$946.70</div></div>
+              <div><div class="sl">ROE</div><div class="sv">160%</div></div>
+            </div>
+            <div class="ec-reason"><div class="ec-rl">매수 이유</div>AI 서비스 확장 주가 미반영 판단. WWDC 이후 수익 모델 구체화 기대.</div>
+          </div>
+
+          <div class="ecard">
+            <div class="ec-top">
+              <div class="ec-row1"><span class="ec-ticker">NVDA</span><span class="ec-time">10:15 AM</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <span class="ec-name">NVIDIA Corp.</span><span class="badge bb">매수</span>
+              </div>
+            </div>
+            <div class="ec-stats">
+              <div><div class="sl">체결가</div><div class="sv">$124.80</div></div>
+              <div><div class="sl">수량</div><div class="sv">3주</div></div>
+              <div><div class="sl">PER</div><div class="sv">45.1x</div></div>
+              <div><div class="sl">PBR</div><div class="sv">36.7x</div></div>
+              <div><div class="sl">총금액</div><div class="sv">$374.40</div></div>
+              <div><div class="sl">EPS</div><div class="sv">+265%</div></div>
+            </div>
+            <div class="ec-reason"><div class="ec-rl">매수 이유</div>데이터센터 GPU 수요 3~4년 지속 구조. 블랙웰 가속화 확인, 분할 매수 시작.</div>
+          </div>
+
+          <div class="ecard">
+            <div class="ec-top">
+              <div class="ec-row1"><span class="ec-ticker">MSFT</span><span class="ec-time">02:50 PM</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <span class="ec-name">Microsoft Corp.</span><span class="badge bs">매도</span>
+              </div>
+            </div>
+            <div class="ec-stats">
+              <div><div class="sl">체결가</div><div class="sv">$432.10</div></div>
+              <div><div class="sl">수량</div><div class="sv">2주</div></div>
+              <div><div class="sl">평균단가</div><div class="sv">$398.00</div></div>
+              <div><div class="sl">수익률</div><div class="sv" style="color:#1a8c5e;">+8.6%</div></div>
+              <div><div class="sl">실현손익</div><div class="sv" style="color:#1a8c5e;">+$68.20</div></div>
+              <div><div class="sl">보유기간</div><div class="sv">47일</div></div>
+            </div>
+            <div class="ec-reason"><div class="ec-rl">매도 이유</div>목표 수익 8% 달성. Azure 성장률 소폭 둔화 가능성, 비중 조정 익절.</div>
+          </div>
+
+          <div class="ecard" style="background:#f8fcff;border:1px dashed #b8d8ec;align-items:center;justify-content:center;gap:6px;">
+            <i class="ti ti-plus" style="font-size:18px;color:#b0ccd8;" aria-hidden="true"></i>
+            <div style="font-size:10px;color:#7aa5be;">이날의 일지 추가</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- COMPANY VIEW -->
+    <div class="company-view hidden" id="v-co">
+
+      <div class="co-sidebar">
+        <div class="sec-label" style="padding:0 2px;">종목 선택</div>
+        <div class="co-item on" onclick="pickCo('aapl',this)">
+          <div class="co-logo" style="background:#1a1a1a;color:#fff;"></div>
+          <div class="co-info"><div class="co-ticker">AAPL</div><div class="co-cnt">5회 거래</div></div>
+          <div class="co-dot dot-hold"></div>
+        </div>
+        <div class="co-item" onclick="pickCo('nvda',this)">
+          <div class="co-logo" style="background:#5a9200;color:#fff;">N</div>
+          <div class="co-info"><div class="co-ticker">NVDA</div><div class="co-cnt">3회 거래</div></div>
+          <div class="co-dot dot-hold"></div>
+        </div>
+        <div class="co-item" onclick="pickCo('msft',this)">
+          <div class="co-logo" style="background:#0067b8;color:#fff;">M</div>
+          <div class="co-info"><div class="co-ticker">MSFT</div><div class="co-cnt">4회 거래</div></div>
+          <div class="co-dot dot-sold"></div>
+        </div>
+        <div class="co-item" onclick="pickCo('tsla',this)">
+          <div class="co-logo" style="background:#b30000;color:#fff;">T</div>
+          <div class="co-info"><div class="co-ticker">TSLA</div><div class="co-cnt">2회 거래</div></div>
+          <div class="co-dot dot-hold"></div>
+        </div>
+        <div class="co-item" onclick="pickCo('googl',this)">
+          <div class="co-logo" style="background:#1a56b0;color:#fff;">G</div>
+          <div class="co-info"><div class="co-ticker">GOOGL</div><div class="co-cnt">3회 거래</div></div>
+          <div class="co-dot dot-sold"></div>
+        </div>
+      </div>
+
+      <div class="co-main">
+
+        <!-- banners per company -->
+        <div id="ban-aapl" class="co-banner">
+          <div class="cb-left">
+            <div class="cb-logo" style="background:#1a1a1a;color:#fff;font-size:11px;"></div>
+            <div><div class="cb-ticker">AAPL <span style="font-size:11px;font-weight:400;color:#7aa5be;">Apple Inc.</span></div><div class="cb-name">NASDAQ · 총 5회 거래</div></div>
+          </div>
+          <span class="cb-badge bb">보유중</span>
+        </div>
+        <div id="ban-nvda" class="co-banner hidden">
+          <div class="cb-left">
+            <div class="cb-logo" style="background:#5a9200;color:#fff;">N</div>
+            <div><div class="cb-ticker">NVDA <span style="font-size:11px;font-weight:400;color:#7aa5be;">NVIDIA Corp.</span></div><div class="cb-name">NASDAQ · 총 3회 거래</div></div>
+          </div>
+          <span class="cb-badge bb">보유중</span>
+        </div>
+        <div id="ban-msft" class="co-banner hidden">
+          <div class="cb-left">
+            <div class="cb-logo" style="background:#0067b8;color:#fff;">M</div>
+            <div><div class="cb-ticker">MSFT <span style="font-size:11px;font-weight:400;color:#7aa5be;">Microsoft Corp.</span></div><div class="cb-name">NASDAQ · 총 4회 거래</div></div>
+          </div>
+          <span class="cb-badge bs">매도 완료</span>
+        </div>
+        <div id="ban-tsla" class="co-banner hidden">
+          <div class="cb-left">
+            <div class="cb-logo" style="background:#b30000;color:#fff;">T</div>
+            <div><div class="cb-ticker">TSLA <span style="font-size:11px;font-weight:400;color:#7aa5be;">Tesla Inc.</span></div><div class="cb-name">NASDAQ · 총 2회 거래</div></div>
+          </div>
+          <span class="cb-badge bb">보유중</span>
+        </div>
+        <div id="ban-googl" class="co-banner hidden">
+          <div class="cb-left">
+            <div class="cb-logo" style="background:#1a56b0;color:#fff;">G</div>
+            <div><div class="cb-ticker">GOOGL <span style="font-size:11px;font-weight:400;color:#7aa5be;">Alphabet Inc.</span></div><div class="cb-name">NASDAQ · 총 3회 거래</div></div>
+          </div>
+          <span class="cb-badge bs">매도 완료</span>
+        </div>
+
+        <!-- card news grids -->
+        <div id="cn-aapl" class="cn-grid">
+          <div class="cn-card featured">
+            <div class="cn-header" style="border-bottom:1px solid #f0f6fa;">
+              <div class="cn-h-row"><span style="font-size:9px;font-weight:500;color:#1a7abf;">최근 거래</span><span class="badge bb">매수</span></div>
+              <div class="cn-date">2026.06.10 · 09:42 AM</div>
+              <div class="cn-price-row"><span class="cn-price">$189.34</span><span class="cn-pricesub">× 5주 = $946.70</span></div>
+            </div>
+            <div class="cn-divider"></div>
+            <div class="cn-body">
+              <div class="cn-stats-row">
+                <div><div class="sl">PER</div><div class="sv">28.4x</div></div>
+                <div><div class="sl">PBR</div><div class="sv">8.2x</div></div>
+                <div><div class="sl">ROE</div><div class="sv">160%</div></div>
+              </div>
+              <div class="cn-reason"><div class="cn-rl">매수 이유</div>AI 서비스 확장이 주가에 아직 미반영. WWDC 이후 수익 모델 구체화 예상. 서비스 매출 30% 돌파.</div></div>
+          </div>
+          <div class="cn-card">
+            <div class="cn-header" style="border-bottom:1px solid #f0f6fa;">
+              <div class="cn-h-row"><span style="font-size:9px;color:#7aa5be;">이전 거래</span><span class="badge bb">매수</span></div>
+              <div class="cn-date">2026.04.22 · 11:10 AM</div>
+              <div class="cn-price-row"><span class="cn-price">$172.40</span><span class="cn-pricesub">× 3주</span></div>
+            </div>
+            <div class="cn-divider"></div>
+            <div class="cn-body">
+              <div class="cn-stats-row">
+                <div><div class="sl">PER</div><div class="sv">26.1x</div></div>
+                <div><div class="sl">PBR</div><div class="sv">7.6x</div></div>
+                <div><div class="sl">ROE</div><div class="sv">155%</div></div>
+              </div>
+              <div class="cn-reason"><div class="cn-rl">매수 이유</div>실적 발표 전 저점 분할 매수. 서비스 부문 성장 지속 확인.</div></div>
+          </div>
+          <div class="cn-card">
+            <div class="cn-header" style="border-bottom:1px solid #f0f6fa;">
+              <div class="cn-h-row"><span style="font-size:9px;color:#7aa5be;">이전 거래</span><span class="badge bb">매수</span></div>
+              <div class="cn-date">2026.02.11 · 10:05 AM</div>
+              <div class="cn-price-row"><span class="cn-price">$158.20</span><span class="cn-pricesub">× 5주</span></div>
+            </div>
+            <div class="cn-divider"></div>
+            <div class="cn-body">
+              <div class="cn-stats-row">
+                <div><div class="sl">PER</div><div class="sv">24.8x</div></div>
+                <div><div class="sl">PBR</div><div class="sv">7.1x</div></div>
+                <div><div class="sl">ROE</div><div class="sv">148%</div></div>
+              </div>
+              <div class="cn-reason"><div class="cn-rl">매수 이유</div>비중 확대. 분기 실적 어닝 서프라이즈 예상, 추가 진입.</div></div>
+          </div>
+          <div class="cn-card" style="background:#f8fcff;border:1px dashed #b8d8ec;align-items:center;justify-content:center;gap:5px;">
+            <i class="ti ti-plus" style="font-size:16px;color:#b0ccd8;" aria-hidden="true"></i>
+            <div style="font-size:9px;color:#7aa5be;">새 일지 추가</div>
+          </div>
+        </div>
+
+        <div id="cn-nvda" class="cn-grid hidden">
+          <div class="cn-card featured">
+            <div class="cn-header" style="border-bottom:1px solid #f0f6fa;">
+              <div class="cn-h-row"><span style="font-size:9px;font-weight:500;color:#1a7abf;">최근 거래</span><span class="badge bb">매수</span></div>
+              <div class="cn-date">2026.06.10 · 10:15 AM</div>
+              <div class="cn-price-row"><span class="cn-price">$124.80</span><span class="cn-pricesub">× 3주 = $374.40</span></div>
+            </div>
+            <div class="cn-divider"></div>
+            <div class="cn-body">
+              <div class="cn-stats-row">
+                <div><div class="sl">PER</div><div class="sv">45.1x</div></div>
+                <div><div class="sl">PBR</div><div class="sv">36.7x</div></div>
+                <div><div class="sl">EPS</div><div class="sv">+265%</div></div>
+              </div>
+              <div class="cn-reason"><div class="cn-rl">매수 이유</div>데이터센터 GPU 수요 3~4년 지속 구조. 블랙웰 출하 가속화 확인, 분할 매수 시작.</div></div>
+          </div>
+          <div class="cn-card">
+            <div class="cn-header" style="border-bottom:1px solid #f0f6fa;">
+              <div class="cn-h-row"><span style="font-size:9px;color:#7aa5be;">이전 거래</span><span class="badge bb">매수</span></div>
+              <div class="cn-date">2026.03.05 · 09:55 AM</div>
+              <div class="cn-price-row"><span class="cn-price">$98.40</span><span class="cn-pricesub">× 5주</span></div>
+            </div>
+            <div class="cn-divider"></div>
+            <div class="cn-body">
+              <div class="cn-stats-row">
+                <div><div class="sl">PER</div><div class="sv">38.2x</div></div>
+                <div><div class="sl">PBR</div><div class="sv">28.1x</div></div>
+                <div><div class="sl">EPS</div><div class="sv">+180%</div></div>
+              </div>
+              <div class="cn-reason"><div class="cn-rl">매수 이유</div>H100 수요 공급 부족 지속. 첫 포지션 진입.</div></div>
+          </div>
+          <div class="cn-card">
+            <div class="cn-header" style="border-bottom:1px solid #f0f6fa;">
+              <div class="cn-h-row"><span style="font-size:9px;color:#7aa5be;">이전 거래</span><span class="badge bb">매수</span></div>
+              <div class="cn-date">2026.01.20 · 02:30 PM</div>
+              <div class="cn-price-row"><span class="cn-price">$87.60</span><span class="cn-pricesub">× 3주</span></div>
+            </div>
+            <div class="cn-divider"></div>
+            <div class="cn-body">
+              <div class="cn-stats-row">
+                <div><div class="sl">PER</div><div class="sv">32.1x</div></div>
+                <div><div class="sl">PBR</div><div class="sv">22.4x</div></div>
+                <div><div class="sl">EPS</div><div class="sv">+140%</div></div>
+              </div>
+              <div class="cn-reason"><div class="cn-rl">매수 이유</div>조정 구간 추가 매수. 장기 보유 관점 유지.</div></div>
+          </div>
+          <div class="cn-card" style="background:#f8fcff;border:1px dashed #b8d8ec;align-items:center;justify-content:center;gap:5px;">
+            <i class="ti ti-plus" style="font-size:16px;color:#b0ccd8;" aria-hidden="true"></i>
+            <div style="font-size:9px;color:#7aa5be;">새 일지 추가</div>
+          </div>
+        </div>
+
+        <div id="cn-msft" class="cn-grid hidden">
+          <div class="cn-card featured" style="border-color:#b8d8ec;">
+            <div class="cn-header" style="border-bottom:1px solid #f0f6fa;">
+              <div class="cn-h-row"><span style="font-size:9px;font-weight:500;color:#1a7abf;">최근 거래</span><span class="badge bs">매도</span></div>
+              <div class="cn-date">2026.06.10 · 02:50 PM</div>
+              <div class="cn-price-row"><span class="cn-price">$432.10</span><span class="cn-pricesub">평균 $398 → <span style="color:#1a8c5e;">+8.6%</span></span></div>
+            </div>
+            <div class="cn-divider"></div>
+            <div class="cn-body">
+              <div class="cn-stats-row">
+                <div><div class="sl">수익률</div><div class="sv" style="color:#1a8c5e;">+8.6%</div></div>
+                <div><div class="sl">실현손익</div><div class="sv" style="color:#1a8c5e;">+$68.20</div></div>
+                <div><div class="sl">보유기간</div><div class="sv">47일</div></div>
+              </div>
+              <div class="cn-reason"><div class="cn-rl">매도 이유</div>목표 수익 8% 달성. Azure 성장 소폭 둔화 가능성, 비중 조정.</div></div>
+          </div>
+          <div class="cn-card">
+            <div class="cn-header" style="border-bottom:1px solid #f0f6fa;">
+              <div class="cn-h-row"><span style="font-size:9px;color:#7aa5be;">이전 거래</span><span class="badge bb">매수</span></div>
+              <div class="cn-date">2026.04.24 · 10:30 AM</div>
+              <div class="cn-price-row"><span class="cn-price">$398.00</span><span class="cn-pricesub">× 2주</span></div>
+            </div>
+            <div class="cn-divider"></div>
+            <div class="cn-body">
+              <div class="cn-stats-row">
+                <div><div class="sl">PER</div><div class="sv">31.2x</div></div>
+                <div><div class="sl">PBR</div><div class="sv">12.1x</div></div>
+                <div><div class="sl">ROE</div><div class="sv">38%</div></div>
+              </div>
+              <div class="cn-reason"><div class="cn-rl">매수 이유</div>코파일럿 기업 도입 가속화. 클라우드 성장 지속 판단.</div></div>
+          </div>
+          <div class="cn-card">
+            <div class="cn-header" style="border-bottom:1px solid #f0f6fa;">
+              <div class="cn-h-row"><span style="font-size:9px;color:#7aa5be;">이전 거래</span><span class="badge bs">매도</span></div>
+              <div class="cn-date">2026.02.03 · 03:15 PM</div>
+              <div class="cn-price-row"><span class="cn-price">$412.50</span><span class="cn-pricesub">이전 포지션 익절</span></div>
+            </div>
+            <div class="cn-divider"></div>
+            <div class="cn-body">
+              <div class="cn-stats-row">
+                <div><div class="sl">수익률</div><div class="sv" style="color:#1a8c5e;">+6.2%</div></div>
+                <div><div class="sl">보유기간</div><div class="sv">38일</div></div>
+                <div><div class="sl">실현손익</div><div class="sv" style="color:#1a8c5e;">+$24.10</div></div>
+              </div>
+              <div class="cn-reason"><div class="cn-rl">매도 이유</div>이전 포지션 전량 익절. 재진입 기회 탐색 후 재매수 계획.</div></div>
+          </div>
+          <div class="cn-card">
+            <div class="cn-header" style="border-bottom:1px solid #f0f6fa;">
+              <div class="cn-h-row"><span style="font-size:9px;color:#7aa5be;">이전 거래</span><span class="badge bb">매수</span></div>
+              <div class="cn-date">2025.12.18 · 09:50 AM</div>
+              <div class="cn-price-row"><span class="cn-price">$388.40</span><span class="cn-pricesub">× 4주</span></div>
+            </div>
+            <div class="cn-divider"></div>
+            <div class="cn-body">
+              <div class="cn-stats-row">
+                <div><div class="sl">PER</div><div class="sv">30.5x</div></div>
+                <div><div class="sl">PBR</div><div class="sv">11.8x</div></div>
+                <div><div class="sl">ROE</div><div class="sv">35%</div></div>
+              </div>
+              <div class="cn-reason"><div class="cn-rl">매수 이유</div>연말 조정 구간 진입. Azure AI 성장 본격화 기대.</div></div>
+          </div>
+        </div>
+
+        <div id="cn-tsla" class="cn-grid hidden">
+          <div class="cn-card featured">
+            <div class="cn-header" style="border-bottom:1px solid #f0f6fa;">
+              <div class="cn-h-row"><span style="font-size:9px;font-weight:500;color:#1a7abf;">최근 거래</span><span class="badge bb">매수</span></div>
+              <div class="cn-date">2026.05.10 · 11:30 AM</div>
+              <div class="cn-price-row"><span class="cn-price">$242.50</span><span class="cn-pricesub">× 4주 = $970.00</span></div>
+            </div>
+            <div class="cn-divider"></div>
+            <div class="cn-body">
+              <div class="cn-stats-row">
+                <div><div class="sl">PER</div><div class="sv">68.2x</div></div>
+                <div><div class="sl">PBR</div><div class="sv">12.4x</div></div>
+                <div><div class="sl">매출성장</div><div class="sv">+22%</div></div>
+              </div>
+              <div class="cn-reason"><div class="cn-rl">매수 이유</div>FSD 구독 수익화 본격화 시점 판단. 로보택시 허가 기대감, 에너지 부문 성장 긍정적.</div></div>
+          </div>
+          <div class="cn-card">
+            <div class="cn-header" style="border-bottom:1px solid #f0f6fa;">
+              <div class="cn-h-row"><span style="font-size:9px;color:#7aa5be;">이전 거래</span><span class="badge bb">매수</span></div>
+              <div class="cn-date">2026.03.14 · 10:20 AM</div>
+              <div class="cn-price-row"><span class="cn-price">$198.70</span><span class="cn-pricesub">× 2주</span></div>
+            </div>
+            <div class="cn-divider"></div>
+            <div class="cn-body">
+              <div class="cn-stats-row">
+                <div><div class="sl">PER</div><div class="sv">54.1x</div></div>
+                <div><div class="sl">PBR</div><div class="sv">9.8x</div></div>
+                <div><div class="sl">매출성장</div><div class="sv">+18%</div></div>
+              </div>
+              <div class="cn-reason"><div class="cn-rl">매수 이유</div>Model Y 판매 반등 신호. 첫 포지션 소량 진입.</div></div>
+          </div>
+          <div class="cn-card" style="background:#f8fcff;border:1px dashed #b8d8ec;align-items:center;justify-content:center;gap:5px;">
+            <i class="ti ti-plus" style="font-size:16px;color:#b0ccd8;" aria-hidden="true"></i>
+            <div style="font-size:9px;color:#7aa5be;">새 일지 추가</div>
+          </div>
+          <div class="cn-card" style="background:#f4fdf8;border:1px solid #b8e8d0;align-items:center;justify-content:center;gap:4px;padding:12px;">
+            <i class="ti ti-clock" style="font-size:14px;color:#1a8c5e;" aria-hidden="true"></i>
+            <div style="font-size:9px;font-weight:500;color:#0d6640;">그날의 그때…</div>
+            <div style="font-size:8px;color:#4a9a70;text-align:center;line-height:1.4;">1달 전 이 종목을 매수하셨어요. 그때의 판단이 지금도 유효한지 돌아보세요.</div>
+          </div>
+        </div>
+
+        <div id="cn-googl" class="cn-grid hidden">
+          <div class="cn-card featured" style="border-color:#b8d8ec;">
+            <div class="cn-header" style="border-bottom:1px solid #f0f6fa;">
+              <div class="cn-h-row"><span style="font-size:9px;font-weight:500;color:#1a7abf;">최근 거래</span><span class="badge bs">매도</span></div>
+              <div class="cn-date">2026.05.10 · 02:10 PM</div>
+              <div class="cn-price-row"><span class="cn-price">$178.30</span><span class="cn-pricesub">평균 $158.70 → <span style="color:#1a8c5e;">+12.4%</span></span></div>
+            </div>
+            <div class="cn-divider"></div>
+            <div class="cn-body">
+              <div class="cn-stats-row">
+                <div><div class="sl">수익률</div><div class="sv" style="color:#1a8c5e;">+12.4%</div></div>
+                <div><div class="sl">실현손익</div><div class="sv" style="color:#1a8c5e;">+$58.80</div></div>
+                <div><div class="sl">보유기간</div><div class="sv">92일</div></div>
+              </div>
+              <div class="cn-reason"><div class="cn-rl">매도 이유</div>광고 매출 회복 둔화, AI 검색 전환 비용 증가. 목표 수익 초과 달성으로 익절.</div></div>
+          </div>
+          <div class="cn-card">
+            <div class="cn-header" style="border-bottom:1px solid #f0f6fa;">
+              <div class="cn-h-row"><span style="font-size:9px;color:#7aa5be;">이전 거래</span><span class="badge bb">매수</span></div>
+              <div class="cn-date">2026.02.07 · 10:45 AM</div>
+              <div class="cn-price-row"><span class="cn-price">$158.70</span><span class="cn-pricesub">× 3주</span></div>
+            </div>
+            <div class="cn-divider"></div>
+            <div class="cn-body">
+              <div class="cn-stats-row">
+                <div><div class="sl">PER</div><div class="sv">22.4x</div></div>
+                <div><div class="sl">PBR</div><div class="sv">6.1x</div></div>
+                <div><div class="sl">ROE</div><div class="sv">28%</div></div>
+              </div>
+              <div class="cn-reason"><div class="cn-rl">매수 이유</div>광고 시장 회복 기대. 클라우드(GCP) 점유율 확대 추세.</div></div>
+          </div>
+          <div class="cn-card">
+            <div class="cn-header" style="border-bottom:1px solid #f0f6fa;">
+              <div class="cn-h-row"><span style="font-size:9px;color:#7aa5be;">이전 거래</span><span class="badge bs">매도</span></div>
+              <div class="cn-date">2025.11.20 · 01:40 PM</div>
+              <div class="cn-price-row"><span class="cn-price">$148.20</span><span class="cn-pricesub">이전 포지션</span></div>
+            </div>
+            <div class="cn-divider"></div>
+            <div class="cn-body">
+              <div class="cn-stats-row">
+                <div><div class="sl">수익률</div><div class="sv" style="color:#1a8c5e;">+5.8%</div></div>
+                <div><div class="sl">보유기간</div><div class="sv">55일</div></div>
+                <div><div class="sl">실현손익</div><div class="sv" style="color:#1a8c5e;">+$8.10</div></div>
+              </div>
+              <div class="cn-reason"><div class="cn-rl">매도 이유</div>단기 목표 달성. Bard AI 우려감 해소 전까지 비중 축소.</div></div>
+          </div>
+          <div class="cn-card" style="background:#f8fcff;border:1px dashed #b8d8ec;align-items:center;justify-content:center;gap:5px;">
+            <i class="ti ti-plus" style="font-size:16px;color:#b0ccd8;" aria-hidden="true"></i>
+            <div style="font-size:9px;color:#7aa5be;">새 일지 추가</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="neck"></div>
+<div class="foot"></div>
+</div>
+
+<script>
+function go(view){
+  document.getElementById('tb-date').classList.toggle('on', view==='date');
+  document.getElementById('tb-co').classList.toggle('on', view==='co');
+  document.getElementById('v-date').classList.toggle('hidden', view!=='date');
+  document.getElementById('v-co').classList.toggle('hidden', view!=='co');
+}
+function pickCo(id, el){
+  document.querySelectorAll('.co-item').forEach(x=>x.classList.remove('on'));
+  el.classList.add('on');
+  ['aapl','nvda','msft','tsla','googl'].forEach(c=>{
+    document.getElementById('cn-'+c).classList.toggle('hidden', c!==id);
+    document.getElementById('ban-'+c).classList.toggle('hidden', c!==id);
+  });
+}
+</script>
